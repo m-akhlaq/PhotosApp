@@ -4,10 +4,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlbumActivity extends AppCompatActivity {
 
@@ -26,6 +31,24 @@ public class AlbumActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        RecyclerView albumView = findViewById(R.id.albumList);
+        List<Album> list = new ArrayList<>();
+        list.add(new Album("Album1"));
+        list.add(new Album("Album2"));
+        list.add(new Album("Album3"));
+        list.add(new Album("Album4"));
+        list.add(new Album("Album5"));
+        list.add(new Album("Album6"));
+        list.add(new Album("Album1"));
+        list.add(new Album("Album2"));
+        list.add(new Album("Album3"));
+        list.add(new Album("Album4"));
+        list.add(new Album("Album5"));
+        list.add(new Album("Album6"));
+        AlbumAdapter albumAdapter = new AlbumAdapter(list,this);
+        albumView.setAdapter(albumAdapter);
+        albumView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
