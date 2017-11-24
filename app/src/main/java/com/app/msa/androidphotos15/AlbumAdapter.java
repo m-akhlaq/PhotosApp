@@ -64,16 +64,22 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         // Set item views based on your views and data model
         TextView nameTextView = viewHolder.nameTextView;
         nameTextView.setText(album.getName());
+
         TextView dateTextView = viewHolder.dateTextView;
         dateTextView.setText("Sat, November 3rd 2017");
+
         TextView numberTextVIew = viewHolder.numOfPhotosTextView;
         numberTextVIew.setText("49");
+
         ImageView albumPicture = viewHolder.albumPicture;
         albumPicture.setImageResource(R.drawable.ic_black_album);
+
         ImageButton deleteButton = viewHolder.deleteButton;
         deleteButton.setOnClickListener( v->{
             removeItems(position);
         });
+
+        
 
     }
 
