@@ -1,4 +1,4 @@
-package com.app.msa.androidphotos15;
+package model;
 
 /**
  * Created by shaheer on 11/19/17.

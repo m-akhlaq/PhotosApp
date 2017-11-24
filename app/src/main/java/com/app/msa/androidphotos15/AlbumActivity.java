@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Album;
+import model.User;
+
 public class AlbumActivity extends AppCompatActivity {
 
     @Override
@@ -34,19 +37,21 @@ public class AlbumActivity extends AppCompatActivity {
 
         RecyclerView albumView = findViewById(R.id.albumList);
         List<Album> list = new ArrayList<>();
+        User user = new User("shaheer");
         list.add(new Album("Album1"));
         list.add(new Album("Album2"));
         list.add(new Album("Album3"));
         list.add(new Album("Album4"));
         list.add(new Album("Album5"));
         list.add(new Album("Album6"));
-        list.add(new Album("Album1"));
-        list.add(new Album("Album2"));
-        list.add(new Album("Album3"));
-        list.add(new Album("Album4"));
-        list.add(new Album("Album5"));
-        list.add(new Album("Album6"));
-        AlbumAdapter albumAdapter = new AlbumAdapter(list,this);
+        list.add(new Album("Album7"));
+        list.add(new Album("Album8"));
+        list.add(new Album("Album9"));
+        list.add(new Album("Album10"));
+        list.add(new Album("Album11"));
+        list.add(new Album("Album12"));
+        user.setAlbumList(list);
+        AlbumAdapter albumAdapter = new AlbumAdapter(user,this);
         albumView.setAdapter(albumAdapter);
         albumView.setLayoutManager(new LinearLayoutManager(this));
     }
