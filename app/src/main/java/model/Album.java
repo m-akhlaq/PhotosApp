@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by shaheer on 11/19/17.
  */
 
-public class Album {
+public class Album implements Serializable{
 
     private String name;
     private String date;
@@ -19,7 +20,9 @@ public class Album {
     public void addPhoto(Photo photo){
         photosList.add(photo);
     }
-
+    public void setName(String name){
+        this.name=name;
+    }
 
     public String getName() {
         return name;
@@ -30,6 +33,8 @@ public class Album {
     public List<Photo> getPhotosList() {
         return photosList;
     }
+
+
 
     @Override
     public String toString() {

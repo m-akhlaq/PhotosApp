@@ -1,15 +1,21 @@
 package com.app.msa.androidphotos15;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,42 +24,53 @@ import model.Album;
 import model.User;
 
 public class AlbumActivity extends AppCompatActivity {
-
+    List<Album> list = new ArrayList<>();
+    User user = new User("shaheer");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        RecyclerView albumView = findViewById(R.id.albumList);
+        albumView.setLayoutManager(new LinearLayoutManager(getContext()));
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Enter Album Name");
+                final EditText input = new EditText(getContext());
+                input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String result = input.getText().toString();
+                        if (result!=null && result.trim().length()>0){
+                            if (user.nameExists(result)==false) {
+                                user.addAlbum(new Album(result));
+                                AlbumAdapter albumAdapter = new AlbumAdapter(user, getContext());
+                                albumView.setAdapter(albumAdapter);
+                            }else showDuplicateNameDialog();
+                        }else showInvalidNameDialog();
+
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
             }
+
         });
 
-        RecyclerView albumView = findViewById(R.id.albumList);
-        List<Album> list = new ArrayList<>();
-        User user = new User("shaheer");
-        list.add(new Album("Album1"));
-        list.add(new Album("Album2"));
-        list.add(new Album("Album3"));
-        list.add(new Album("Album4"));
-        list.add(new Album("Album5"));
-        list.add(new Album("Album6"));
-        list.add(new Album("Album7"));
-        list.add(new Album("Album8"));
-        list.add(new Album("Album9"));
-        list.add(new Album("Album10"));
-        list.add(new Album("Album11"));
-        list.add(new Album("Album12"));
-        user.setAlbumList(list);
-        AlbumAdapter albumAdapter = new AlbumAdapter(user,this);
-        albumView.setAdapter(albumAdapter);
-        albumView.setLayoutManager(new LinearLayoutManager(this));
+
+
     }
 
     @Override
@@ -77,4 +94,35 @@ public class AlbumActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    public Context getContext(){
+        return this;
+    }
+    private void showInvalidNameDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Error");
+        alertDialog.setMessage("Please enter a valid name!");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private void showDuplicateNameDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Error");
+        alertDialog.setMessage("The album name already exists!");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
 }
