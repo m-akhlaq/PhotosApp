@@ -2,6 +2,7 @@ package com.app.msa.androidphotos15;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,14 +18,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.Album;
+import model.Photo;
 import model.User;
 
 public class AlbumActivity extends AppCompatActivity {
     List<Album> list = new ArrayList<>();
+    RecyclerView albumView;
     User user = new User("shaheer");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,7 @@ public class AlbumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        RecyclerView albumView = findViewById(R.id.albumList);
+        albumView = findViewById(R.id.albumList);
         albumView.setLayoutManager(new LinearLayoutManager(getContext()));
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -125,4 +129,27 @@ public class AlbumActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AlbumAdapter albumAdapter = new AlbumAdapter(user, getContext());
+        albumView.setAdapter(albumAdapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode!=RESULT_OK || data==null){return;}
+        if (requestCode==1){
+            Bundle bundle = data.getExtras();
+            if (bundle!=null) {
+                ArrayList<Photo> photoArrayList = bundle.getParcelableArrayList("PHOTOS");
+                int position = bundle.getInt("POSITION");
+                user.getAlbums().get(position).getPhotosList().clear();
+                user.getAlbums().get(position).getPhotosList().addAll(photoArrayList);
+                AlbumAdapter albumAdapter = new AlbumAdapter(user, getContext());
+                albumView.setAdapter(albumAdapter);
+            }
+        }
+    }
 }
