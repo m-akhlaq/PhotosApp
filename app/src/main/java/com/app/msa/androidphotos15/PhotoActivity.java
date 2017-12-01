@@ -32,10 +32,13 @@ public class PhotoActivity extends AppCompatActivity {
     int position=0;
     RecyclerView photosView;
     User user = null;
+    boolean runOnStop=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
+        runOnStop=true;
         //photosView=findViewById(R.id.photoList);
        // photosView.setLayoutManager(new GridLayoutManager(getContext(),2));
         Bundle bundle = getIntent().getExtras();
@@ -69,15 +72,19 @@ public class PhotoActivity extends AppCompatActivity {
         intent.putExtras(bundle);
         setResult(RESULT_OK,intent);
         Log.e("hello","onBackPressedRan");
+        runOnStop=false;
         finish();
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        user.getAlbums().get(position).getPhotosList().clear();
-        user.getAlbums().get(position).getPhotosList().addAll(photoList);
-        writeUser(user);
+        if (runOnStop) {
+            user.getAlbums().get(position).getPhotosList().clear();
+            user.getAlbums().get(position).getPhotosList().addAll(photoList);
+            writeUser(user);
+        }
     }
 
     public Context getContext(){return this;}
