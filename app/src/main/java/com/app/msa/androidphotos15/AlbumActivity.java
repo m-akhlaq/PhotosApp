@@ -3,6 +3,7 @@ package com.app.msa.androidphotos15;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +35,13 @@ import model.User;
 public class AlbumActivity extends AppCompatActivity {
     List<Album> list = new ArrayList<>();
     RecyclerView albumView;
-    User user = new User("shaheer");
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
+
+       checkFirstRun();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         albumView = findViewById(R.id.albumList);
@@ -137,8 +145,17 @@ public class AlbumActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        Log.e("Er","Album onStop called");
+        writeUser(user);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("Er","Photos Data Recieved");
+
         if (resultCode!=RESULT_OK || data==null){return;}
         if (requestCode==1){
             Bundle bundle = data.getExtras();
@@ -152,4 +169,64 @@ public class AlbumActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void checkFirstRun() {
+        final String PREFS_NAME = "MyPrefsFile";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int DOESNT_EXIST = -1;
+
+
+        // Get current version code
+        int currentVersionCode = BuildConfig.VERSION_CODE;
+
+        // Get saved version code
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+
+        // Check for first run or upgrade
+        if (currentVersionCode == savedVersionCode) {
+            user=readUser();
+            return;
+        } else if (savedVersionCode == DOESNT_EXIST) {
+            User u = new User("Admin");
+            writeUser(u);
+            user=readUser();
+        }
+        // Update the shared preferences with the current version code
+        prefs.edit().putInt(PREF_VERSION_CODE_KEY, currentVersionCode).apply();
+    }
+
+    private User readUser(){
+       String filename = getContext().getFilesDir()+"data.ser";
+        FileInputStream fis = null;
+        ObjectInputStream in = null;
+        User tempUser=null;
+        File f = new File(filename);
+
+        try {
+            fis = new FileInputStream(filename);
+            in = new ObjectInputStream(fis);
+            tempUser = (User) in.readObject();
+            in.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return tempUser;
+    }
+
+    private void writeUser(User u){
+        String filename = getContext().getFilesDir()+"data.ser";
+        FileOutputStream fos = null;
+        ObjectOutputStream out = null;
+        try {
+            fos = new FileOutputStream(filename);
+            out = new ObjectOutputStream(fos);
+            out.writeObject(u);
+            out.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 }
