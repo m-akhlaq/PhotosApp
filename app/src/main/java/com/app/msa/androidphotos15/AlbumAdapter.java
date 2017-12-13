@@ -73,6 +73,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 ArrayList<Photo> list = a.getPhotosList();
                 bundle.putParcelableArrayList("PHOTOS",list);
                 bundle.putInt("POSITION",position);
+                bundle.putParcelable("USER",user);
                 Intent intent = new Intent(getContext(),PhotoActivity.class);
                 intent.putExtras(bundle);
                 activity.startActivityForResult(intent,1);

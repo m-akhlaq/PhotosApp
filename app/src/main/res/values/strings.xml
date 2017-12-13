@@ -2,4 +2,13 @@
     <string name="app_name">Photos</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_photo">Your Photos</string>
+    <string name="title_activity_slideshow">SlideshowActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="location_tag">Location Tag:</string>
+    <string name="noTag">None currently</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="your_photo">Your Photo</string>
+    <string name="title_activity_display_photo">DisplayPhotoActivity</string>
 </resources>

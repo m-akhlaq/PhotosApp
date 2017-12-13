@@ -1,12 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical" android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="18dp"
+    >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:textSize="15dp"
+        android:id="@+id/photo_caption"
+        />
     <android.support.v7.widget.CardView
         android:layout_width="200dp"
         android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/photo_ImageView"
+        android:scaleType="fitStart"
+        android:adjustViewBounds="true"
+        />
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_delete"
+        android:layout_below="@+id/photo_ImageView"
+        android:id="@+id/photo_deleteButton"
+        />
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_edit"
+        android:layout_below="@+id/photo_ImageView"
+        android:layout_toRightOf="@id/photo_deleteButton"
+        android:layout_marginLeft="30dp"
+        android:id="@+id/photo_editButton"
+        />
+        <ImageButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_move"
+            android:layout_below="@+id/photo_ImageView"
+            android:layout_toRightOf="@id/photo_editButton"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/photo_moveButton"
+            />
+    </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

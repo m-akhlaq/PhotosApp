@@ -100,7 +100,9 @@ public class AlbumActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.album_search) {
+            Intent intent = new Intent(getContext(),SearchActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -156,17 +158,10 @@ public class AlbumActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("Er","Photos Data Recieved");
 
-        if (resultCode!=RESULT_OK || data==null){return;}
-        if (requestCode==1){
-            Bundle bundle = data.getExtras();
-            if (bundle!=null) {
-                ArrayList<Photo> photoArrayList = bundle.getParcelableArrayList("PHOTOS");
-                int position = bundle.getInt("POSITION");
-                user.getAlbums().get(position).getPhotosList().clear();
-                user.getAlbums().get(position).getPhotosList().addAll(photoArrayList);
+        if (requestCode==1 && resultCode==RESULT_OK){
+                user=readUser();
                 AlbumAdapter albumAdapter = new AlbumAdapter(user, getContext());
                 albumView.setAdapter(albumAdapter);
-            }
         }
     }
 
@@ -174,11 +169,8 @@ public class AlbumActivity extends AppCompatActivity {
         final String PREFS_NAME = "MyPrefsFile";
         final String PREF_VERSION_CODE_KEY = "version_code";
         final int DOESNT_EXIST = -1;
-
-
         // Get current version code
         int currentVersionCode = BuildConfig.VERSION_CODE;
-
         // Get saved version code
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         int savedVersionCode = prefs.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);

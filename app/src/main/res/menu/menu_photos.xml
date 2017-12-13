@@ -3,9 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.app.msa.androidphotos15.AlbumActivity">
     <item
-        android:id="@+id/album_search"
+        android:id="@+id/photo_search"
         android:orderInCategory="100"
         android:icon="@drawable/ic_search"
+        android:title="Move"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/photo_slideshow"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_slideshow"
         android:title="Move"
         app:showAsAction="always" />
 </menu>
